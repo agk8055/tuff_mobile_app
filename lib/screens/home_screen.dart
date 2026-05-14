@@ -5,16 +5,24 @@ import 'profile_screen.dart';
 import 'report_screen.dart';
 import 'courses_screen.dart';
 import 'branch_selection_screen.dart';
+import 'bmi_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int initialIndex;
+  const HomeScreen({super.key, this.initialIndex = 0});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
 
   final List<Widget> _pages = [
     const _HomeBody(),
@@ -155,18 +163,26 @@ class _HomeBody extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: _buildStatCard(
-                  context: context,
-                  title: 'BMI',
-                  icon: Icons.fitness_center,
-                  value: '22.4',
-                  unit: '',
-                  bottomWidget: Text(
-                    'HEALTHY RANGE',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: const Color(0xFFFAC00C),
-                          fontWeight: FontWeight.w700,
-                        ),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const BmiScreen()),
+                    );
+                  },
+                  child: _buildStatCard(
+                    context: context,
+                    title: 'BMI',
+                    icon: Icons.fitness_center,
+                    value: '22.4',
+                    unit: '',
+                    bottomWidget: Text(
+                      'HEALTHY RANGE',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: const Color(0xFFFAC00C),
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
                   ),
                 ),
               ),
@@ -183,7 +199,7 @@ class _HomeBody extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -296,7 +312,7 @@ class _HomeBody extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

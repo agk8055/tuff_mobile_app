@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
               
               // Email Field
               _buildLabel('EMAIL ADDRESS'),
-              _buildTextField('alex@example.com', controller: _emailController),
+              _buildTextField('example@gmail.com', controller: _emailController),
               
               const SizedBox(height: 30),
               

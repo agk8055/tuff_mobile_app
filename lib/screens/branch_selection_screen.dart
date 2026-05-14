@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_app_bar.dart';
+import 'plan_selection_screen.dart';
 
 class BranchSelectionScreen extends StatelessWidget {
   const BranchSelectionScreen({super.key});
@@ -321,9 +322,14 @@ class BranchSelectionScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const PlanSelectionScreen()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: isPrimary ? const Color(0xFFFAC00C) : const Color(0xFFFDF1D3),
+                      backgroundColor: const Color(0xFFFAC00C),
                       foregroundColor: Colors.black,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -331,6 +337,15 @@ class BranchSelectionScreen extends StatelessWidget {
                         side: BorderSide(color: const Color(0xFFFAC00C).withOpacity(0.5)),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 12),
+                    ).copyWith(
+                      overlayColor: WidgetStateProperty.resolveWith<Color?>(
+                        (states) {
+                          if (states.contains(WidgetState.hovered) || states.contains(WidgetState.pressed)) {
+                            return const Color(0xFFE5AE0B); // Darker yellow
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                     child: const Text(
                       'SELECT BRANCH',

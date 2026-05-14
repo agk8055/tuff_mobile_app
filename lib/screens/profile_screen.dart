@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
+import 'bmi_screen.dart';
+import 'subscription_details_screen.dart';
+import 'attendance_report_screen.dart';
+import 'bmi_history_screen.dart';
+import 'purchased_plans_screen.dart';
+import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -88,11 +94,19 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: _buildStatCard(
-                  context,
-                  'BMI',
-                  '22.4',
-                  'Healthy',
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const BmiScreen()),
+                    );
+                  },
+                  child: _buildStatCard(
+                    context,
+                    'BMI',
+                    '22.4',
+                    'Healthy',
+                  ),
                 ),
               ),
             ],
@@ -105,24 +119,48 @@ class ProfileScreen extends StatelessWidget {
             icon: Icons.badge,
             title: 'Subscription Details',
             subtitle: 'ELITE MEMBER',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SubscriptionDetailsScreen()),
+              );
+            },
           ),
           _buildActionItem(
             context,
             icon: Icons.calendar_today,
             title: 'Attendance Report',
             subtitle: '24 SESSIONS THIS MONTH',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AttendanceReportScreen()),
+              );
+            },
           ),
           _buildActionItem(
             context,
             icon: Icons.analytics,
             title: 'BMI History',
             subtitle: 'STABLE PERFORMANCE',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BmiHistoryScreen()),
+              );
+            },
           ),
           _buildActionItem(
             context,
             icon: Icons.shopping_bag,
             title: 'Purchased Plans',
             subtitle: '3 ACTIVE TRAINING MODULES',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PurchasedPlansScreen()),
+              );
+            },
           ),
 
           const SizedBox(height: 24),
@@ -131,7 +169,12 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditProfileScreen()),
+                );
+              },
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0xFFFAC00C)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -234,6 +277,7 @@ class ProfileScreen extends StatelessWidget {
     required IconData icon,
     required String title,
     required String subtitle,
+    VoidCallback? onTap,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -250,6 +294,7 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
       child: ListTile(
+        onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
         leading: Container(
           padding: const EdgeInsets.all(10),
