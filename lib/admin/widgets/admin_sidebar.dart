@@ -38,7 +38,7 @@ class AdminSidebar extends StatelessWidget {
                 _navItem(Icons.assignment_outlined, "Plans"),
                 _navItem(null, "Report", svgPath: "assets/icons/report_icon.svg"),
                 _navItem(Icons.admin_panel_settings_outlined, "User & Role"),
-                _navItem(null, "Online Courses", svgPath: "assets/icons/online_course_icon.svg"),
+                _navItem(null, "Online Courses", svgPath: "assets/icons/course_icon.svg"),
                 _navItem(Icons.settings_outlined, "Settings"),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
