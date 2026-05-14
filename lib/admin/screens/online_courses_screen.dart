@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/admin_sidebar.dart';
 import '../widgets/admin_app_bar.dart';
+import 'admin_dashboard.dart';
+import 'branch_management.dart';
+import 'trainer_mangaement.dart';
+import 'user_role_screen.dart';
 
 class OnlineCoursesScreen extends StatelessWidget {
   const OnlineCoursesScreen({super.key});
@@ -18,7 +21,8 @@ class OnlineCoursesScreen extends StatelessWidget {
         child: AdminSidebar(
           selectedItem: "Online Courses",
           onItemSelected: (item) {
-            Navigator.pop(context); // Close drawer
+            Navigator.pop(context);
+            _navigateTo(context, item);
           },
         ),
       ),
@@ -31,7 +35,7 @@ class OnlineCoursesScreen extends StatelessWidget {
               if (isDesktop)
                 AdminSidebar(
                   selectedItem: "Online Courses",
-                  onItemSelected: (item) {},
+                  onItemSelected: (item) => _navigateTo(context, item),
                 ),
               Expanded(
                 child: Container(
@@ -116,61 +120,17 @@ class OnlineCoursesScreen extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Lexend',
                   fontSize: 14,
-                  color: primaryYellow.withOpacity(0.8),
+                  color: primaryYellow.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ],
           ),
         ),
-        if (isDesktop) _buildTopActions(),
       ],
     );
   }
 
-  Widget _buildTopActions() {
-    return Row(
-      children: [
-        Stack(
-          children: [
-            Icon(Icons.notifications_none_rounded, color: primaryYellow, size: 28),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
-                child: const Text('3', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center),
-              ),
-            )
-          ],
-        ),
-        const SizedBox(width: 20),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Row(
-            children: [
-              const CircleAvatar(radius: 16, backgroundColor: Colors.grey),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text("Admin", style: TextStyle(fontFamily: 'Lexend', fontWeight: FontWeight.bold, fontSize: 12)),
-                  Text("Super Admin", style: TextStyle(fontFamily: 'Lexend', fontSize: 10)),
-                ],
-              ),
-              const Icon(Icons.keyboard_arrow_down, size: 16),
-            ],
-          ),
-        )
-      ],
-    );
-  }
 
   Widget _buildLibraryHealth() {
     return _cardWrapper(
@@ -252,7 +212,7 @@ class OnlineCoursesScreen extends StatelessWidget {
           ),
           CircleAvatar(
             radius: 12,
-            backgroundColor: isSelected ? Colors.black.withOpacity(0.1) : Colors.brown.shade50,
+            backgroundColor: isSelected ? Colors.black.withValues(alpha: 0.1) : Colors.brown.shade50,
             child: Text(count, style: const TextStyle(fontSize: 10, color: Colors.black, fontWeight: FontWeight.bold)),
           ),
         ],
@@ -287,7 +247,7 @@ class OnlineCoursesScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 10, offset: const Offset(0, 4))],
       ),
       child: Column(
         children: [
@@ -306,7 +266,7 @@ class OnlineCoursesScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5), 
+                      color: Colors.black.withValues(alpha: 0.5), 
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -412,9 +372,39 @@ class OnlineCoursesScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: primaryYellow.withOpacity(0.1)),
+        border: Border.all(color: primaryYellow.withValues(alpha: 0.1)),
       ),
       child: child,
+    );
+  }
+
+  void _navigateTo(BuildContext context, String item) {
+    if (item == "Online Courses") return;
+
+    Widget nextScreen;
+    switch (item) {
+      case "Dashboard":
+        nextScreen = const AdminDashboardScreen();
+        break;
+      case "Branches":
+        nextScreen = const BranchManagementScreen();
+        break;
+      case "Trainers":
+        nextScreen = const TrainerManagementScreen();
+        break;
+      case "User & Role":
+        nextScreen = const UserRoleScreen();
+        break;
+      default:
+        return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
+      ),
     );
   }
 }

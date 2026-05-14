@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../widgets/admin_sidebar.dart';
 import '../widgets/admin_app_bar.dart';
+import 'admin_dashboard.dart';
+import 'branch_management.dart';
+import 'trainer_mangaement.dart';
+import 'online_courses_screen.dart';
 
 class UserRoleScreen extends StatelessWidget {
   const UserRoleScreen({super.key});
@@ -17,7 +21,8 @@ class UserRoleScreen extends StatelessWidget {
         child: AdminSidebar(
           selectedItem: "User & Role",
           onItemSelected: (item) {
-            Navigator.pop(context); // Close drawer
+            Navigator.pop(context);
+            _navigateTo(context, item);
           },
         ),
       ),
@@ -30,7 +35,7 @@ class UserRoleScreen extends StatelessWidget {
               if (isDesktop)
                 AdminSidebar(
                   selectedItem: "User & Role",
-                  onItemSelected: (item) {},
+                  onItemSelected: (item) => _navigateTo(context, item),
                 ),
               Expanded(
                 child: Container(
@@ -99,14 +104,6 @@ class UserRoleScreen extends StatelessWidget {
             ],
           ),
         ),
-        if (isDesktop)
-          Row(
-            children: const [
-              Icon(Icons.notifications_none, color: Color(0xFFD4A017)),
-              SizedBox(width: 16),
-              CircleAvatar(radius: 20, backgroundColor: Colors.grey),
-            ],
-          )
       ],
     );
   }
@@ -285,6 +282,36 @@ class UserRoleScreen extends StatelessWidget {
         border: Border.all(color: const Color(0xFFF2E8CF)),
       ),
       child: child,
+    );
+  }
+
+  void _navigateTo(BuildContext context, String item) {
+    if (item == "User & Role") return;
+
+    Widget nextScreen;
+    switch (item) {
+      case "Dashboard":
+        nextScreen = const AdminDashboardScreen();
+        break;
+      case "Branches":
+        nextScreen = const BranchManagementScreen();
+        break;
+      case "Trainers":
+        nextScreen = const TrainerManagementScreen();
+        break;
+      case "Online Courses":
+        nextScreen = const OnlineCoursesScreen();
+        break;
+      default:
+        return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
+      ),
     );
   }
 }

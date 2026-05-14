@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../widgets/admin_sidebar.dart';
 import '../widgets/admin_app_bar.dart';
+import 'admin_dashboard.dart';
+import 'trainer_mangaement.dart';
+import 'user_role_screen.dart';
+import 'online_courses_screen.dart';
 
 class BranchManagementScreen extends StatelessWidget {
   const BranchManagementScreen({super.key});
@@ -17,7 +21,8 @@ class BranchManagementScreen extends StatelessWidget {
         child: AdminSidebar(
           selectedItem: "Branches",
           onItemSelected: (item) {
-            Navigator.pop(context); // Close drawer
+            Navigator.pop(context);
+            _navigateTo(context, item);
           },
         ),
       ),
@@ -31,7 +36,7 @@ class BranchManagementScreen extends StatelessWidget {
               if (isDesktop)
                 AdminSidebar(
                   selectedItem: "Branches",
-                  onItemSelected: (item) {},
+                  onItemSelected: (item) => _navigateTo(context, item),
                 ),
               Expanded(
                 child: Container(
@@ -47,7 +52,6 @@ class BranchManagementScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildTopBar(isDesktop),
                           const SizedBox(height: 32),
                           _buildHeaderActions(isDesktop),
                           const SizedBox(height: 32),
@@ -69,51 +73,6 @@ class BranchManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTopBar(bool isDesktop) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Stack(
-          children: [
-            Icon(Icons.notifications_none_rounded, color: primaryYellow, size: 28),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
-                child: const Text('3', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center),
-              ),
-            )
-          ],
-        ),
-        const SizedBox(width: 20),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Row(
-            children: [
-              const CircleAvatar(radius: 16, backgroundColor: Colors.grey),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text("Admin", style: TextStyle(fontFamily: 'Lexend', fontWeight: FontWeight.bold, fontSize: 12)),
-                  Text("Super Admin", style: TextStyle(fontFamily: 'Lexend', fontSize: 10)),
-                ],
-              ),
-              const SizedBox(width: 8),
-              const Icon(Icons.keyboard_arrow_down, size: 16),
-            ],
-          ),
-        )
-      ],
-    );
-  }
 
   Widget _buildHeaderActions(bool isDesktop) {
     return Row(
@@ -124,7 +83,7 @@ class BranchManagementScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: creamBg,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: primaryYellow.withOpacity(0.3)),
+            border: Border.all(color: primaryYellow.withValues(alpha: 0.3)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +107,7 @@ class BranchManagementScreen extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: primaryYellow,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-            shape: StadiumBorder(),
+            shape: const StadiumBorder(),
           ),
         )
       ],
@@ -162,7 +121,7 @@ class BranchManagementScreen extends StatelessWidget {
       crossAxisCount: crossAxisCount,
       crossAxisSpacing: 24,
       mainAxisSpacing: 24,
-      childAspectRatio: 0.75, // Adjust based on your exact layout needs
+      childAspectRatio: 0.75,
       children: [
         _branchCard("UNIT 45 FITNESS", "2,450", "742 Neon Plaza, Sector 4", "Marcus Vane", "ACTIVE", true),
         _branchCard("OZONE GYM", "1892", "12 Summit Blvd, Heights", "Rahul K T", "MAINTENANCE", false),
@@ -176,11 +135,10 @@ class BranchManagementScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: primaryYellow.withOpacity(0.3)),
+        border: Border.all(color: primaryYellow.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
-          // Image Header
           Expanded(
             flex: 4,
             child: Stack(
@@ -188,7 +146,7 @@ class BranchManagementScreen extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                    color: Colors.grey.shade300, // Placeholder for branch images
+                    color: Colors.grey.shade300,
                   ),
                 ),
                 Positioned(
@@ -197,7 +155,7 @@ class BranchManagementScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.7),
+                      color: Colors.black.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -209,7 +167,6 @@ class BranchManagementScreen extends StatelessWidget {
               ],
             ),
           ),
-          // Content
           Expanded(
             flex: 6,
             child: Padding(
@@ -239,13 +196,12 @@ class BranchManagementScreen extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  // Hub Lead Section
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: creamBg,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: primaryYellow.withOpacity(0.2)),
+                      border: Border.all(color: primaryYellow.withValues(alpha: 0.2)),
                     ),
                     child: Row(
                       children: [
@@ -262,7 +218,6 @@ class BranchManagementScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // Actions Row 1
                   Row(
                     children: [
                       Expanded(child: _actionButton("DETAILS", Icons.visibility_outlined)),
@@ -271,7 +226,6 @@ class BranchManagementScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  // Actions Row 2
                   SizedBox(
                     width: double.infinity,
                     child: _actionButton("OPERATIONAL CONTROL", Icons.settings_outlined),
@@ -344,7 +298,7 @@ class BranchManagementScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: primaryYellow.withOpacity(0.2)),
+        border: Border.all(color: primaryYellow.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,13 +311,13 @@ class BranchManagementScreen extends StatelessWidget {
                 children: [
                   TextButton.icon(
                     onPressed: () {}, 
-                    icon: Icon(Icons.filter_list, color: Colors.black87, size: 16), 
+                    icon: const Icon(Icons.filter_list, color: Colors.black87, size: 16), 
                     label: const Text("FILTER", style: TextStyle(fontFamily: 'Lexend', color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12))
                   ),
                   const SizedBox(width: 16),
                   TextButton.icon(
                     onPressed: () {}, 
-                    icon: Icon(Icons.download_rounded, color: Colors.black87, size: 16), 
+                    icon: const Icon(Icons.download_rounded, color: Colors.black87, size: 16), 
                     label: const Text("EXPORT", style: TextStyle(fontFamily: 'Lexend', color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12))
                   ),
                 ],
@@ -402,7 +356,7 @@ class BranchManagementScreen extends StatelessWidget {
       DataCell(Row(
         children: [
           CircleAvatar(
-            backgroundColor: primaryYellow.withOpacity(0.2),
+            backgroundColor: primaryYellow.withValues(alpha: 0.2),
             child: Icon(Icons.apartment_rounded, color: primaryYellow, size: 18),
           ),
           const SizedBox(width: 12),
@@ -429,5 +383,35 @@ class BranchManagementScreen extends StatelessWidget {
         ],
       )),
     ]);
+  }
+
+  void _navigateTo(BuildContext context, String item) {
+    if (item == "Branches") return;
+
+    Widget nextScreen;
+    switch (item) {
+      case "Dashboard":
+        nextScreen = const AdminDashboardScreen();
+        break;
+      case "Trainers":
+        nextScreen = const TrainerManagementScreen();
+        break;
+      case "User & Role":
+        nextScreen = const UserRoleScreen();
+        break;
+      case "Online Courses":
+        nextScreen = const OnlineCoursesScreen();
+        break;
+      default:
+        return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
+      ),
+    );
   }
 }

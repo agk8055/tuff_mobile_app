@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../widgets/admin_sidebar.dart';
 import '../widgets/admin_app_bar.dart';
+import 'admin_dashboard.dart';
+import 'branch_management.dart';
+import 'user_role_screen.dart';
+import 'online_courses_screen.dart';
 
 class TrainerManagementScreen extends StatelessWidget {
   const TrainerManagementScreen({super.key});
@@ -17,7 +21,8 @@ class TrainerManagementScreen extends StatelessWidget {
         child: AdminSidebar(
           selectedItem: "Trainers",
           onItemSelected: (item) {
-            Navigator.pop(context); // Close drawer
+            Navigator.pop(context);
+            _navigateTo(context, item);
           },
         ),
       ),
@@ -30,7 +35,7 @@ class TrainerManagementScreen extends StatelessWidget {
               if (isDesktop)
                 AdminSidebar(
                   selectedItem: "Trainers", 
-                  onItemSelected: (item) {},
+                  onItemSelected: (item) => _navigateTo(context, item),
                 ),
               Expanded(
                 child: Container(
@@ -79,7 +84,7 @@ class TrainerManagementScreen extends StatelessWidget {
                 fontFamily: 'Poppins',
                 fontSize: isDesktop ? 28 : 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.white, // In the image, this text is white but the rest of the layout is cream. Wait, looking closely at image_929154.jpg, the header text is on the black background!
+                color: Colors.black,
               ),
             ),
             const SizedBox(height: 4),
@@ -88,67 +93,16 @@ class TrainerManagementScreen extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Lexend',
                 fontSize: 14,
-                color: primaryYellow.withOpacity(0.9),
+                color: primaryYellow.withValues(alpha: 0.9),
                 fontWeight: FontWeight.w600,
               ),
             ),
           ],
         ),
-        if (isDesktop) _buildTopBar(),
       ],
     );
   }
 
-  // ** Correction: Based on the image, the header is actually inside the black area. 
-  // To keep the layout structure consistent with previous screens where the cream container 
-  // wraps everything except the sidebar, I will style the text black as per standard dashboard UI, 
-  // but if you want it exactly like the image, the header needs to be above the cream container. 
-  // I will style it black here assuming standard container wrapping. Let's adjust to match the visual:
-
-  Widget _buildTopBar() {
-    return Row(
-      children: [
-        Stack(
-          children: [
-            Icon(Icons.notifications_none_rounded, color: primaryYellow, size: 28),
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
-                child: const Text('3', style: TextStyle(color: Colors.white, fontSize: 8), textAlign: TextAlign.center),
-              ),
-            )
-          ],
-        ),
-        const SizedBox(width: 20),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Row(
-            children: [
-              const CircleAvatar(radius: 16, backgroundColor: Colors.grey),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text("Admin", style: TextStyle(fontFamily: 'Lexend', fontWeight: FontWeight.bold, fontSize: 12)),
-                  Text("Super Admin", style: TextStyle(fontFamily: 'Lexend', fontSize: 10)),
-                ],
-              ),
-              const SizedBox(width: 8),
-              const Icon(Icons.keyboard_arrow_down, size: 16),
-            ],
-          ),
-        )
-      ],
-    );
-  }
 
   Widget _buildStatsAndActionRow(double width) {
     bool isMobile = width < 800;
@@ -189,7 +143,7 @@ class TrainerManagementScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: creamBg,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: primaryYellow.withOpacity(0.3)),
+        border: Border.all(color: primaryYellow.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +178,7 @@ class TrainerManagementScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: creamBg,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: primaryYellow.withOpacity(0.3)),
+        border: Border.all(color: primaryYellow.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,7 +226,7 @@ class TrainerManagementScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: primaryYellow.withOpacity(0.3)),
+        border: Border.all(color: primaryYellow.withValues(alpha: 0.3)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
@@ -282,7 +236,7 @@ class TrainerManagementScreen extends StatelessWidget {
             headingRowColor: WidgetStateProperty.all(const Color(0xFFFDF2F0)),
             dataRowMinHeight: 80,
             dataRowMaxHeight: 80,
-            dividerThickness: 0, // Removes horizontal lines between rows for a cleaner look
+            dividerThickness: 0,
             columns: [
               _dataColumn("TRAINER"),
               _dataColumn("SPECIFICATION"),
@@ -317,7 +271,7 @@ class TrainerManagementScreen extends StatelessWidget {
     return DataRow(cells: [
       DataCell(Row(
         children: [
-          const CircleAvatar(radius: 18, backgroundColor: Colors.grey), // Placeholder for image
+          const CircleAvatar(radius: 18, backgroundColor: Colors.grey),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,7 +289,7 @@ class TrainerManagementScreen extends StatelessWidget {
       DataCell(Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: primaryYellow.withOpacity(0.15),
+          color: primaryYellow.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text("Active", style: TextStyle(fontFamily: 'Lexend', fontSize: 11, fontWeight: FontWeight.bold, color: primaryYellow)),
@@ -385,6 +339,36 @@ class TrainerManagementScreen extends StatelessWidget {
           fontWeight: FontWeight.bold,
           color: isActive ? Colors.black : Colors.black54,
         ),
+      ),
+    );
+  }
+
+  void _navigateTo(BuildContext context, String item) {
+    if (item == "Trainers") return;
+
+    Widget nextScreen;
+    switch (item) {
+      case "Dashboard":
+        nextScreen = const AdminDashboardScreen();
+        break;
+      case "Branches":
+        nextScreen = const BranchManagementScreen();
+        break;
+      case "User & Role":
+        nextScreen = const UserRoleScreen();
+        break;
+      case "Online Courses":
+        nextScreen = const OnlineCoursesScreen();
+        break;
+      default:
+        return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
       ),
     );
   }
