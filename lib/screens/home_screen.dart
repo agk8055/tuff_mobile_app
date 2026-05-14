@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../widgets/custom_app_bar.dart';
+import '../widgets/user_sidebar.dart';
 import 'profile_screen.dart';
 import 'report_screen.dart';
 import 'courses_screen.dart';
@@ -33,20 +34,48 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        leading: _buildLeading(),
-        trailing: _buildTrailing(),
-      ),
-      body: _pages[_currentIndex],
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool isDesktop = constraints.maxWidth > 800;
+
+        return Scaffold(
+          appBar: CustomAppBar(
+            leading: _buildLeading(),
+            trailing: _buildTrailing(),
+          ),
+          body: Row(
+            children: [
+              if (isDesktop)
+                UserSideBar(
+                  currentIndex: _currentIndex,
+                  onItemSelected: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
+                ),
+              Expanded(
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1000),
+                    child: _pages[_currentIndex],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          bottomNavigationBar: isDesktop
+              ? null
+              : CustomBottomNavBar(
+                  currentIndex: _currentIndex,
+                  onTap: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
+                ),
+        );
+      },
     );
   }
 

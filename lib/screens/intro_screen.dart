@@ -45,38 +45,43 @@ class _IntroScreenState extends State<IntroScreen> {
     return Scaffold(
       backgroundColor: _currentPage == 3 ? Colors.black : Colors.white,
       body: SafeArea(
-        child: PageView(
-          controller: _pageController,
-          onPageChanged: (int page) {
-            setState(() {
-              _currentPage = page;
-            });
-          },
-          physics: const BouncingScrollPhysics(),
-          children: [
-            _buildLightPage(
-              pageIndex: 0,
-              title: 'Push Beyond Your Limits.',
-              subtitle:
-                  'Unlock your true potential with personalized workouts and expert guidance tailored just for you.',
-              illustration: const Icon(Icons.fitness_center, size: 100, color: Colors.grey),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (int page) {
+                setState(() {
+                  _currentPage = page;
+                });
+              },
+              physics: const BouncingScrollPhysics(),
+              children: [
+                _buildLightPage(
+                  pageIndex: 0,
+                  title: 'Push Beyond Your Limits.',
+                  subtitle:
+                      'Unlock your true potential with personalized workouts and expert guidance tailored just for you.',
+                  illustration: const Icon(Icons.fitness_center, size: 100, color: Colors.grey),
+                ),
+                _buildLightPage(
+                  pageIndex: 1,
+                  title: 'Train Smart. Stay Consistent.',
+                  subtitle:
+                      'Track progress, follow structured programs, and stay on top of your fitness journey every single day.',
+                  illustration: const Icon(Icons.directions_run, size: 100, color: Colors.grey),
+                ),
+                _buildLightPage(
+                  pageIndex: 2,
+                  title: 'Your Fitness Journey Starts\nHere.',
+                  subtitle:
+                      'Build strength, improve endurance, and transform your lifestyle—one workout at a time.',
+                  illustration: const Icon(Icons.sports_gymnastics, size: 100, color: Colors.grey),
+                ),
+                _buildDarkPage(),
+              ],
             ),
-            _buildLightPage(
-              pageIndex: 1,
-              title: 'Train Smart. Stay Consistent.',
-              subtitle:
-                  'Track progress, follow structured programs, and stay on top of your fitness journey every single day.',
-              illustration: const Icon(Icons.directions_run, size: 100, color: Colors.grey),
-            ),
-            _buildLightPage(
-              pageIndex: 2,
-              title: 'Your Fitness Journey Starts\nHere.',
-              subtitle:
-                  'Build strength, improve endurance, and transform your lifestyle—one workout at a time.',
-              illustration: const Icon(Icons.sports_gymnastics, size: 100, color: Colors.grey),
-            ),
-            _buildDarkPage(),
-          ],
+          ),
         ),
       ),
     );
