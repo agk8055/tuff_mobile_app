@@ -5,6 +5,12 @@ import 'branch_management.dart';
 import 'trainer_mangaement.dart';
 import 'user_role_screen.dart';
 import 'online_courses_screen.dart';
+import 'members_screen.dart';
+import 'plan_management_screen.dart';
+import 'report_screen.dart';
+
+
+
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -106,7 +112,7 @@ class AdminDashboardScreen extends StatelessWidget {
       crossAxisCount: crossAxisCount,
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
-      childAspectRatio: width > 1200 ? 1.8 : 2.5,
+      childAspectRatio: width > 1200 ? 1.6 : 2.0,
       children: [
         _statCard("TOTAL USERS", "12,345", "+12% Growth vs last month", Icons.people_alt_rounded),
         _statCard("ACTIVE SUB", "85,473", "65% Conversion rate optimized", Icons.verified_user_rounded),
@@ -228,7 +234,7 @@ class AdminDashboardScreen extends StatelessWidget {
           Stack(
             children: [
               SizedBox(
-                height: 180,
+                height: 150,
                 width: double.infinity,
                 child: CustomPaint(
                   painter: _AreaChartPainter(primaryYellow),
@@ -272,14 +278,14 @@ class AdminDashboardScreen extends StatelessWidget {
           const SizedBox(height: 32),
           Center(
             child: SizedBox(
-              height: 160,
-              width: 160,
+              height: 140,
+              width: 140,
               child: CustomPaint(
                 painter: _DonutChartPainter(),
               ),
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 20),
           _tierLegend("Unlimited", "55%", primaryYellow),
           _tierLegend("Plus", "32%", const Color(0xFF9C27B0).withValues(alpha: 0.6)),
           _tierLegend("Basic", "13%", const Color(0xFF795548).withValues(alpha: 0.7)),
@@ -404,6 +410,15 @@ class AdminDashboardScreen extends StatelessWidget {
         break;
       case "Online Courses":
         nextScreen = const OnlineCoursesScreen();
+        break;
+      case "Members":
+        nextScreen = const MembersScreen();
+        break;
+      case "Plans":
+        nextScreen = const PlanManagementScreen();
+        break;
+      case "Report":
+        nextScreen = const ReportScreen();
         break;
       default:
         return;

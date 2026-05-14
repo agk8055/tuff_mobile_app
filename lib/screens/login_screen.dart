@@ -26,13 +26,28 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: _buildLoginForm(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginForm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 60),
               Text(
                 'Welcome Back',
                 style: GoogleFonts.poppins(
@@ -52,167 +67,168 @@ class _LoginScreenState extends State<LoginScreen> {
                   letterSpacing: 0.5,
                 ),
               ),
-              const SizedBox(height: 80),
-              
-              // Email Field
-              _buildLabel('EMAIL ADDRESS'),
-              _buildTextField('example@gmail.com', controller: _emailController),
-              
-              const SizedBox(height: 30),
-              
-              // Password Field
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildLabel('PASSWORD'),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      'Forgot Password ?',
-                      style: GoogleFonts.lexend(
-                        color: const Color(0xFFFAC00C),
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              _buildTextField(
-                '••••••••', 
-                controller: _passwordController,
-                obscureText: true,
-                suffixIcon: const Icon(Icons.visibility_outlined, color: Colors.black54),
-              ),
-              
-              const SizedBox(height: 40),
-              
-              // Login Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_emailController.text == 'admin@gmail.com' && _passwordController.text == '123') {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
-                      );
-                    } else {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => const HomeScreen()),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFAC00C),
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    'LOGIN',
-                    style: GoogleFonts.lexend(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-              
-              const SizedBox(height: 30),
-              
-              // Or Divider
-              Row(
-                children: [
-                  Expanded(child: Container(height: 1, color: Colors.black12)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      'or',
-                      style: GoogleFonts.lexend(color: Colors.black45, fontSize: 12),
-                    ),
-                  ),
-                  Expanded(child: Container(height: 1, color: Colors.black12)),
-                ],
-              ),
-              
-              const SizedBox(height: 30),
-              
-              // Login with Phone
-              SizedBox(
-                width: 200,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFFAC00C)),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'LOGIN WITH PHONE',
-                    style: GoogleFonts.lexend(
-                      color: const Color(0xFF33201C),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ),
-              
-              const SizedBox(height: 60),
-              
-              // Signup Link
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SignupScreen()),
-                  );
-                },
-                child: RichText(
-                  text: TextSpan(
-                    text: 'if you don\'t have an account ? ',
-                    style: GoogleFonts.lexend(
-                      color: Colors.black,
-                      fontSize: 14,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'Sign Up',
-                        style: GoogleFonts.lexend(
-                          color: const Color(0xFFFAC00C),
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
             ],
           ),
         ),
-      ),
+        const SizedBox(height: 60),
+        
+        // Email Field
+        _buildLabel('EMAIL ADDRESS'),
+        _buildTextField('example@gmail.com', controller: _emailController),
+        
+        const SizedBox(height: 25),
+        
+        // Password Field
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildLabel('PASSWORD'),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                'Forgot Password ?',
+                style: GoogleFonts.lexend(
+                  color: const Color(0xFFFAC00C),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        _buildTextField(
+          '••••••••', 
+          controller: _passwordController,
+          obscureText: true,
+          suffixIcon: const Icon(Icons.visibility_outlined, color: Colors.black54),
+        ),
+        
+        const SizedBox(height: 40),
+        
+        // Login Button
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              if (_emailController.text == 'admin@gmail.com' && _passwordController.text == '123') {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
+                );
+              } else {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const HomeScreen()),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFAC00C),
+              foregroundColor: Colors.black,
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              elevation: 0,
+            ),
+            child: Text(
+              'LOGIN',
+              style: GoogleFonts.lexend(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        
+        const SizedBox(height: 30),
+        
+        // Or Divider
+        Row(
+          children: [
+            Expanded(child: Container(height: 1, color: Colors.black12)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                'or',
+                style: GoogleFonts.lexend(color: Colors.black45, fontSize: 12),
+              ),
+            ),
+            Expanded(child: Container(height: 1, color: Colors.black12)),
+          ],
+        ),
+        
+        const SizedBox(height: 30),
+        
+        // Login with Phone
+        Center(
+          child: SizedBox(
+            width: 200,
+            child: OutlinedButton(
+              onPressed: () {},
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Color(0xFFFAC00C)),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'LOGIN WITH PHONE',
+                style: GoogleFonts.lexend(
+                  color: const Color(0xFF33201C),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+        ),
+        
+        const SizedBox(height: 60),
+        
+        // Signup Link
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SignupScreen()),
+              );
+            },
+            child: RichText(
+              text: TextSpan(
+                text: 'if you don\'t have an account ? ',
+                style: GoogleFonts.lexend(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+                children: [
+                  TextSpan(
+                    text: 'Sign Up',
+                    style: GoogleFonts.lexend(
+                      color: const Color(0xFFFAC00C),
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 
   Widget _buildLabel(String label) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 4, bottom: 8),
-        child: Text(
-          label,
-          style: GoogleFonts.lexend(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 8),
+      child: Text(
+        label,
+        style: GoogleFonts.lexend(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
         ),
       ),
     );

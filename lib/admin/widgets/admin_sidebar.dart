@@ -31,7 +31,7 @@ class AdminSidebar extends StatelessWidget {
           Expanded(
             child: ListView(
               children: [
-                _navItem(Icons.grid_view_rounded, "Dashboard"),
+                _navItem(null, "Dashboard", svgPath: "assets/icons/dashboard_icon.svg"),
                 _navItem(Icons.location_on_outlined, "Branches"),
                 _navItem(Icons.person_outline, "Trainers"),
                 _navItem(Icons.people_alt_outlined, "Members"),
@@ -45,33 +45,6 @@ class AdminSidebar extends StatelessWidget {
                   child: Divider(color: Colors.white24, indent: 24, endIndent: 24),
                 ),
                 _navLogout(context),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.add, color: Colors.white, size: 16),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Quick Actions",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Lexend',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                _quickActionButton("Add New Branch", primaryYellow, Colors.black, onTap: () => onItemSelected("Branches")),
-                const SizedBox(height: 12),
-                _quickActionButton("Add New Trainer", Colors.transparent, primaryYellow, isOutline: true, onTap: () => onItemSelected("Trainers")),
               ],
             ),
           ),
@@ -168,33 +141,6 @@ class AdminSidebar extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _quickActionButton(String label, Color bgColor, Color textColor, {bool isOutline = false, VoidCallback? onTap}) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        width: double.infinity,
-        height: 36,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(20),
-          border: isOutline ? Border.all(color: textColor, width: 1) : null,
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              color: textColor,
-              fontFamily: 'Poppins',
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-            ),
           ),
         ),
       ),

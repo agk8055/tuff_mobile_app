@@ -5,6 +5,12 @@ import 'admin_dashboard.dart';
 import 'branch_management.dart';
 import 'trainer_mangaement.dart';
 import 'online_courses_screen.dart';
+import 'members_screen.dart';
+import 'plan_management_screen.dart';
+import 'report_screen.dart';
+
+
+
 
 class UserRoleScreen extends StatelessWidget {
   const UserRoleScreen({super.key});
@@ -301,6 +307,15 @@ class UserRoleScreen extends StatelessWidget {
         break;
       case "Online Courses":
         nextScreen = const OnlineCoursesScreen();
+        break;
+      case "Members":
+        nextScreen = const MembersScreen();
+        break;
+      case "Plans":
+        nextScreen = const PlanManagementScreen();
+        break;
+      case "Report":
+        nextScreen = const ReportScreen();
         break;
       default:
         return;

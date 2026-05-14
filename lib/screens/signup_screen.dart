@@ -12,16 +12,22 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  final int _totalSteps = 7;
+  final int _totalSteps = 8;
 
   // Form Data
   String _name = '';
+  String _email = '';
+  String _password = '';
   String _gender = '';
   String _birthday = '';
   double _height = 178;
   double _weight = 75;
   bool _isCm = true;
   bool _isKg = true;
+  DateTime? _selectedDate;
+  String _experience = '';
+  bool? _hasInjury;
+  final List<String> _selectedInjuries = [];
 
   void _nextPage() {
     if (_currentPage < _totalSteps - 1) {
@@ -32,7 +38,7 @@ class _SignupScreenState extends State<SignupScreen> {
     } else {
       // Show Success Screen
       setState(() {
-        _currentPage = 7; 
+        _currentPage = 8; 
       });
     }
   }
@@ -56,87 +62,159 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_currentPage == 7) {
+    if (_currentPage == 8) {
       return _buildSuccessScreen();
     }
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Top Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Color(0xFFFAC00C)),
-                    onPressed: _previousPage,
-                  ),
-                  Text(
-                    'STEP ${_currentPage + 1} OF $_totalSteps',
-                    style: GoogleFonts.lexend(
-                      color: const Color(0xFFFAC00C),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 550),
+          child: SafeArea(
+            child: Column(
+              children: [
+                _buildTopHeader(),
+                Expanded(child: _buildPageView()),
+                _buildBottomButton(),
+              ],
             ),
-            
-            // Steps PageView
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                children: [
-                  _buildNameStep(),
-                  _buildGenderStep(), 
-                  _buildBirthdayStep(), 
-                  _buildHeightStep(), 
-                  _buildWeightStep(), 
-                  _buildExperienceStep(), 
-                  _buildInjuryStep(), 
-                ],
-              ),
-            ),
-            
-            // Bottom NEXT Button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 30.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _nextPage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFAC00C),
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    'NEXT',
-                    style: GoogleFonts.lexend(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTopHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back, color: Color(0xFFFAC00C)),
+            onPressed: _previousPage,
+          ),
+          Text(
+            'STEP ${_currentPage + 1} OF $_totalSteps',
+            style: GoogleFonts.lexend(
+              color: const Color(0xFFFAC00C),
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPageView() {
+    return PageView(
+      controller: _pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      onPageChanged: (index) {
+        setState(() {
+          _currentPage = index;
+        });
+      },
+      children: [
+        _buildAccountStep(), 
+        _buildNameStep(),
+        _buildGenderStep(), 
+        _buildBirthdayStep(), 
+        _buildHeightStep(), 
+        _buildWeightStep(), 
+        _buildExperienceStep(), 
+        _buildInjuryStep(), 
+      ],
+    );
+  }
+
+  Widget _buildBottomButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 30.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: _nextPage,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFFAC00C),
+            foregroundColor: Colors.black,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 0,
+          ),
+          child: Text(
+            'NEXT',
+            style: GoogleFonts.lexend(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAccountStep() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 20),
+          _buildStepTitle("Create your ", "account"),
+          _buildStepDescription("We need your email and password to secure your fitness data."),
+          const Spacer(),
+          Text(
+            'EMAIL ADDRESS',
+            style: GoogleFonts.lexend(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFFFEF3D0).withValues(alpha: 0.8),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: TextField(
+              onChanged: (val) => _email = val,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFFFAC00C)),
+                hintText: 'example@gmail.com',
+                hintStyle: GoogleFonts.lexend(color: Colors.black26),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(vertical: 18),
+              ),
+            ),
+          ),
+          const SizedBox(height: 25),
+          Text(
+            'PASSWORD',
+            style: GoogleFonts.lexend(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFFFEF3D0).withValues(alpha: 0.8),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: TextField(
+              obscureText: true,
+              onChanged: (val) => _password = val,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFFFAC00C)),
+                hintText: '••••••••',
+                hintStyle: GoogleFonts.lexend(color: Colors.black26),
+                suffixIcon: const Icon(Icons.visibility_outlined, color: Colors.black45),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(vertical: 18),
+              ),
+            ),
+          ),
+          const Spacer(flex: 2),
+        ],
       ),
     );
   }
@@ -277,15 +355,31 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 const Icon(Icons.cake, size: 60, color: Color(0xFFFAC00C)),
                 const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _dateBox('DD'),
-                    const SizedBox(width: 15),
-                    _dateBox('MM'),
-                    const SizedBox(width: 15),
-                    _dateBox('YYYY'),
-                  ],
+                GestureDetector(
+                  onTap: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime(2000),
+                      firstDate: DateTime(1950),
+                      lastDate: DateTime.now(),
+                    );
+                    if (date != null) {
+                      setState(() {
+                        _selectedDate = date;
+                        _birthday = "${date.day}/${date.month}/${date.year}";
+                      });
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _dateBox(_selectedDate?.day.toString().padLeft(2, '0') ?? 'DD'),
+                      const SizedBox(width: 15),
+                      _dateBox(_selectedDate?.month.toString().padLeft(2, '0') ?? 'MM'),
+                      const SizedBox(width: 15),
+                      _dateBox(_selectedDate?.year.toString() ?? 'YYYY'),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -379,15 +473,19 @@ class _SignupScreenState extends State<SignupScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 50),
-                Container(
-                  height: 80,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: const Center(child: Text("175    |  |  |  |    180", style: TextStyle(color: Colors.black26, fontSize: 18))),
+                const SizedBox(height: 30),
+                Slider(
+                  value: _height,
+                  min: 100,
+                  max: 250,
+                  activeColor: const Color(0xFFFAC00C),
+                  inactiveColor: const Color(0xFFFEF3D0),
+                  onChanged: (val) => setState(() => _height = val),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "DRAG TO ADJUST HEIGHT",
+                  style: GoogleFonts.lexend(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black26),
                 ),
               ],
             ),
@@ -457,17 +555,19 @@ class _SignupScreenState extends State<SignupScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 50),
-                Text("PRECISION SCALE", style: GoogleFonts.lexend(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.brown)),
+                const SizedBox(height: 30),
+                Slider(
+                  value: _weight,
+                  min: 30,
+                  max: 200,
+                  activeColor: const Color(0xFFFAC00C),
+                  inactiveColor: const Color(0xFFFEF3D0),
+                  onChanged: (val) => setState(() => _weight = val),
+                ),
                 const SizedBox(height: 10),
-                Container(
-                  height: 80,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: const Center(child: Text("70    75    80    85    90", style: TextStyle(color: Colors.black26, fontSize: 18))),
+                Text(
+                  "DRAG TO ADJUST WEIGHT",
+                  style: GoogleFonts.lexend(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black26),
                 ),
               ],
             ),
@@ -538,31 +638,39 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Widget _experienceCard(String title, String subtitle, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFFAC00C).withValues(alpha: 0.3)),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              color: Color(0xFFFEF3D0),
-              shape: BoxShape.circle,
+    bool isSelected = _experience == title;
+    return GestureDetector(
+      onTap: () => setState(() => _experience = title),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFFEF3D0) : Colors.white,
+          border: Border.all(
+            color: isSelected ? const Color(0xFFFAC00C) : const Color(0xFFFAC00C).withValues(alpha: 0.3),
+            width: isSelected ? 2 : 1,
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isSelected ? const Color(0xFFFAC00C) : const Color(0xFFFEF3D0),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: isSelected ? Colors.white : const Color(0xFFFAC00C), size: 30),
             ),
-            child: Icon(icon, color: const Color(0xFFFAC00C), size: 30),
-          ),
-          const SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: GoogleFonts.lexend(fontSize: 18, fontWeight: FontWeight.bold)),
-              Text(subtitle, style: GoogleFonts.lexend(fontSize: 14, color: Colors.black54)),
-            ],
-          ),
-        ],
+            const SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: GoogleFonts.lexend(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(subtitle, style: GoogleFonts.lexend(fontSize: 14, color: Colors.black54)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -618,37 +726,68 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Widget _injuryOption(String label, IconData icon, bool isYes) {
-    return Container(
-      width: 120,
-      height: 100,
-      decoration: BoxDecoration(
-        color: const Color(0xFFFEF3D0),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: const Color(0xFFFAC00C), size: 40),
-          const SizedBox(height: 5),
-          Text(label, style: GoogleFonts.lexend(fontWeight: FontWeight.bold)),
-        ],
+    bool isSelected = _hasInjury == isYes;
+    return GestureDetector(
+      onTap: () => setState(() => _hasInjury = isYes),
+      child: Container(
+        width: 120,
+        height: 100,
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFFAC00C) : const Color(0xFFFEF3D0),
+          borderRadius: BorderRadius.circular(15),
+          border: isSelected ? Border.all(color: Colors.black12, width: 2) : null,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: isSelected ? Colors.white : const Color(0xFFFAC00C), size: 40),
+            const SizedBox(height: 5),
+            Text(
+              label,
+              style: GoogleFonts.lexend(
+                fontWeight: FontWeight.bold,
+                color: isSelected ? Colors.white : Colors.black,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _injuryTag(String label, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFFAC00C).withValues(alpha: 0.3)),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: const Color(0xFFFAC00C), size: 20),
-          const SizedBox(width: 10),
-          Text(label, style: GoogleFonts.lexend(fontSize: 12, fontWeight: FontWeight.bold)),
-        ],
+    bool isSelected = _selectedInjuries.contains(label);
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (isSelected) {
+            _selectedInjuries.remove(label);
+          } else {
+            _selectedInjuries.add(label);
+          }
+        });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFFAC00C) : Colors.white,
+          border: Border.all(color: const Color(0xFFFAC00C).withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: isSelected ? Colors.white : const Color(0xFFFAC00C), size: 20),
+            const SizedBox(width: 10),
+            Text(
+              label,
+              style: GoogleFonts.lexend(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: isSelected ? Colors.white : Colors.black,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -657,68 +796,72 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E1E1E),
-                borderRadius: BorderRadius.circular(40),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E1E1E),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: const Icon(Icons.check, color: Color(0xFFFAC00C), size: 80),
               ),
-              child: const Icon(Icons.check, color: Color(0xFFFAC00C), size: 80),
-            ),
-            const SizedBox(height: 40),
-            Text(
-              'SUCCESS !',
-              style: GoogleFonts.poppins(
-                fontSize: 42,
-                fontWeight: FontWeight.w900,
-                color: const Color(0xFFFAC00C),
-                letterSpacing: 2,
+              const SizedBox(height: 40),
+              Text(
+                'SUCCESS !',
+                style: GoogleFonts.poppins(
+                  fontSize: 42,
+                  fontWeight: FontWeight.w900,
+                  color: const Color(0xFFFAC00C),
+                  letterSpacing: 2,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Your journey to peak performance starts now.',
-              style: GoogleFonts.lexend(
-                fontSize: 14,
-                color: Colors.black54,
-                fontWeight: FontWeight.w500,
+              const SizedBox(height: 10),
+              Text(
+                'Your journey to peak performance starts now.',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.lexend(
+                  fontSize: 14,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            const SizedBox(height: 100),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => const HomeScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFAC00C),
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 60),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (_) => const HomeScreen()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFAC00C),
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
                     ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    'GO TO HOME',
-                    style: GoogleFonts.lexend(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                    child: Text(
+                      'GO TO HOME',
+                      style: GoogleFonts.lexend(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
